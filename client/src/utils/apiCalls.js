@@ -5,7 +5,7 @@ import axios from "axios";
 export const API_BASE_URL = process.env.REACT_APP_API_URL || "/api";
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: "https://radioblog-mai.onrender.com/api",
   withCredentials: true,
 });
 
