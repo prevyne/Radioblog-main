@@ -34,6 +34,10 @@ const defaultOrigins = [
   "http://127.0.0.1:3000",
   "http://localhost:3001",
   "http://127.0.0.1:3001",
+  // Common Render deployments used by this project — include your deployed origins here
+  "https://radioblog-mai.onrender.com",
+  "https://admin-9m1f.onrender.com",
+  "https://masenoradio.onrender.com",
 ];
 const allowedOrigins = clientOrigins.length ? clientOrigins : defaultOrigins;
 
