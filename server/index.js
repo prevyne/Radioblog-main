@@ -25,7 +25,10 @@ if (process.env.SENTRY_DSN) {
 
 const app = express();
 const PORT = process.env.PORT || 8800;
-const clientOrigins = (process.env.CORS_ALLOWED_ORIGINS || "http://localhost:3000")
+// If CORS_ALLOWED_ORIGINS is not set, default to an empty string so
+// the `defaultOrigins` list is used. Previously this defaulted to
+// localhost which prevented `defaultOrigins` from being applied.
+const clientOrigins = (process.env.CORS_ALLOWED_ORIGINS || "")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
