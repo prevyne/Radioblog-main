@@ -12,6 +12,7 @@
     "caniuse-lite": "^1.0.30001750",
     "cors": "^2.8.5",
     "markdown-to-jsx": "^7.3.2",
+    "nodemon": "^3.1.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",

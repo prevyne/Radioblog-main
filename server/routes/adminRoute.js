@@ -222,4 +222,51 @@ router.delete('/followers/:id', adminAuth, accessLog(), async (req, res) => {
   }
 });
 
+router.get('/analytics', adminAuth, accessLog(), async (req, res) => {
+  try {
+    const Users = (await import('../models/UserModel.js')).default;
+    const Posts = (await import('../models/Posts.js')).default;
+    const Followers = (await import('../models/Followers.js')).default;
+    let Views;
+    try { Views = (await import('../models/Views.js')).default; } catch (e) {}
+
+    // 1. Get Totals (Accurate Counts)
+    // We filter by { status: true } to count ONLY published posts.
+    // If you want to count everything, remove the { status: true } part.
+    const totalPosts = await Posts.countDocuments({ status: true }); 
+    const totalWriters = await Users.countDocuments({ accountType: "Writer" });
+    const followers = await Followers.countDocuments();
+    const totalViews = Views ? await Views.countDocuments() : 0;
+
+    // 2. This creates an array of last 28 days with 0 views (or real data if you have it)
+    const last28Days = Array.from({ length: 28 }, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - (27 - i));
+      return d.toISOString().split('T')[0]; // Format: "YYYY-MM-DD"
+    });
+
+    const viewStats = last28Days.map(date => ({
+      date: date,
+      views: 0 // TODO: Replace this 0 with a real DB query for views per day if available
+    }));
+
+    // 3. Send Response
+    res.status(200).json({
+      totalPosts,
+      followers,
+      totalViews,
+      totalWriters,
+      postsDiff: 0,
+      followersDiff: 0,
+      viewsDiff: 0,
+      writersDiff: 0,
+      viewStats: viewStats // <--- This fixes the Graph!
+    });
+
+  } catch (error) {
+    console.error("GET /admin/analytics error:", error);
+    res.status(500).json({ message: "Error fetching analytics" });
+  }
+});
+
 export default router;
