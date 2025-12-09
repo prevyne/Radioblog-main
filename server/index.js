@@ -25,7 +25,10 @@ if (process.env.SENTRY_DSN) {
 
 const app = express();
 const PORT = process.env.PORT || 8800;
-const clientOrigins = (process.env.CORS_ALLOWED_ORIGINS || "http://localhost:3000")
+// If CORS_ALLOWED_ORIGINS is not set, default to an empty string so
+// the `defaultOrigins` list is used. Previously this defaulted to
+// localhost which prevented `defaultOrigins` from being applied.
+const clientOrigins = (process.env.CORS_ALLOWED_ORIGINS || "")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
@@ -34,8 +37,17 @@ const defaultOrigins = [
   "http://127.0.0.1:3000",
   "http://localhost:3001",
   "http://127.0.0.1:3001",
+  // Common Render deployments used by this project — include your deployed origins here
+  "https://radioblog-mai.onrender.com",
+  "https://admin-9m1f.onrender.com",
+  "https://masenoradio.onrender.com",
 ];
-const allowedOrigins = clientOrigins.length ? clientOrigins : defaultOrigins;
+// Always include the built-in `defaultOrigins` and merge any origins provided
+// via `CORS_ALLOWED_ORIGINS` so an incomplete env value doesn't accidentally
+// block valid deployed origins. Remove duplicates while preserving order.
+const allowedOrigins = Array.from(
+  new Set([...defaultOrigins, ...clientOrigins])
+);
 
 const corsOptions = {
   origin: (origin, callback) => {

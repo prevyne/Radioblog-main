@@ -1,0 +1,9 @@
+{
+  "root": "build/",
+  "routes": {
+    "/**": {
+      "file": "index.html",
+      "status": 200
+    }
+  }
+}

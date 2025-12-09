@@ -44,7 +44,7 @@ function App() {
     <main className='w-full min-h-screen'>
       <Routes>
         <Route element={<Layout />}>
-          <Route index psth='/' element={<Navigate to='/dashboard' />} />
+          <Route index path='/' element={<Navigate to='/dashboard' />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/analytics' element={<Analytics />} />
           <Route path='/categories' element={<Categories />} />

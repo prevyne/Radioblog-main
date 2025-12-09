@@ -1,8 +1,13 @@
-// Uploads are routed through the server API; do NOT call Supabase directly from React.
+﻿// Uploads are routed through the server API; do NOT call Supabase directly from React.
 
 // Default to relative `/api` so admin requests start with /api and will be proxied in dev.
-// Override with `REACT_APP_API_URL` for production/back-end URL.
-export const API_URI = process.env.REACT_APP_API_URL || "/api";
+// Override with `REACT_APP_API_URL` for production/back-end URL. If running in
+// production and `REACT_APP_API_URL` is not set, default to the Render service URL.
+// NOTE: include `/api` so `API_URI` resolves to the server's `/api` namespace in production.
+const DEFAULT_RENDER_API = "https://radioblog-mai.onrender.com/api";
+export const API_URI =
+  process.env.REACT_APP_API_URL ||
+  (process.env.NODE_ENV === "production" ? DEFAULT_RENDER_API : "/api");
 
 export const uploadFile = async (file, { onProgress } = {}) => {
   if (!file) throw new Error("No file provided");
@@ -13,7 +18,7 @@ export const uploadFile = async (file, { onProgress } = {}) => {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch("/api/storage/upload", {
+    const res = await fetch(`${API_URI}/storage/upload`, {
       method: "POST",
       body: formData,
     });

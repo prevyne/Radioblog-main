@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useStore from "../store";
+import { API_URI } from "../utils";
 
 const formatDate = (iso) => {
   try {
@@ -34,7 +35,7 @@ const ShareLogs = () => {
     setLoading(true);
     try {
       const qs = buildQuery(p);
-      const res = await fetch(`/api/admin/share-logs?${qs}`, {
+      const res = await fetch(`${API_URI}/admin/share-logs?${qs}`, {
         headers: { Authorization: token ? `Bearer ${token}` : "" },
       });
       const j = await res.json();

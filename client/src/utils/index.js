@@ -1,5 +1,5 @@
 import { toast } from "sonner";
-import { setAuthHeader } from "./apiCalls";
+import { setAuthHeader, API_BASE_URL } from "./apiCalls";
 
 
 
@@ -37,7 +37,7 @@ export function formatNumber (num) {
         const formData = new FormData();
         formData.append("file", file);
 
-        const res = await fetch("/api/storage/upload", {
+        const res = await fetch(`${API_BASE_URL}/storage/upload`, {
           method: "POST",
           body: formData,
         });
